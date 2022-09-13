@@ -1,7 +1,36 @@
 
 # Grammar
 
+```mermaid
+stateDiagram-v2
+direction LR
 
+state1: boolean_and
+state tail_start <<choice>>
+[*] --> state1
+state1 -->tail_start
+
+state tail {
+
+    state tail_end <<choice>>
+    or: OR
+    state2: boolean_and
+
+    [*] --> or
+    or --> state2
+
+    state2 --> tail_end
+    tail_end --> [*]
+}
+
+tail --> [*]
+
+
+
+
+state1 --> [*]
+
+```
 
 ```
 expression -> boolean_or ;

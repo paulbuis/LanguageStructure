@@ -1,6 +1,8 @@
 package lexer;
 
 import static token.Token.Name.*;
+
+import org.jetbrains.annotations.NotNull;
 import token.Token.Name;
 import token.Token;
 
@@ -18,7 +20,10 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.regex.MatchResult;
 
+import java.text.Normalizer;
+
 public class Lexer {
+
     private static final Map<Name, String> regexMap = new TreeMap(Map.ofEntries(
             entry(OPEN_PAREN, "\\("),
             entry(CLOSE_PAREN, "\\)"),
@@ -39,7 +44,7 @@ public class Lexer {
             entry(ELSE, "else"),
             entry(PLUS, "\\+"),
             entry(MINUS, "-|\\u2212"),
-            entry(MULTIPLY, "\\*"),
+            entry(MULTIPLY, "\\*|\\u00d7|\\u22c5"),
             entry(DIVIDE, "/|\\u00f7"),
             entry(EQUAL, "=="),
             entry(NOT_EQUAL, "!=|\\u2260"),
@@ -60,7 +65,7 @@ public class Lexer {
         }
     }
 
-    private Token matchLongest()
+    private @NotNull Token matchLongest()
     {
         final Map<Name, CharSequence> matchMap = new LinkedHashMap<>();
         CharSequence maxMatch = "";
@@ -82,12 +87,11 @@ public class Lexer {
 
     private CharSequence input; // not final!!!
 
-    public Lexer(CharSequence input) {
-        this.input = input;
-
+    public Lexer(@NotNull CharSequence input) {
+        this.input =  Normalizer.normalize(input, Normalizer.Form.NFKD);
     }
 
-    public List<Token> tokenize() {
+    public @NotNull List<Token> tokenize() {
         final ArrayList<Token> tokens = new ArrayList<>();
         while (!input.isEmpty()) {
             final Token nextToken = matchLongest();

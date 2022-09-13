@@ -1,17 +1,20 @@
-package expression;
+package demo;
 
-
-import java.util.List;
 
 import environment.Environment;
 import evaluate.Evaluator;
+import expression.Derivative;
+import expression.Expression;
+import expression.NumericExpression;
 import org.jetbrains.annotations.NotNull;
 import value.Numeric;
 import value.Value;
 
+import java.util.List;
+
 public class NumericExpressionDemo {
 
-    static Value eval(@NotNull Expression e, @NotNull Environment env) {
+    static Value eval(@NotNull Expression e, Environment env) {
         return Evaluator.eval(e, env);
     }
 

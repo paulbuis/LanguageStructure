@@ -2,17 +2,29 @@ package evaluate;
 
 import expression.*;
 
+import static desugar.DeSugarer.deSugar;
+
+import org.jetbrains.annotations.NotNull;
 import value.Bool;
 import value.Numeric;
 
 import environment.Environment;
 
 public class ComparisonExpressionEvaluator {
-    public static Bool eval(ComparisonExpression expression, Environment environment) {
+    public static Bool eval(@NotNull ComparisonExpression expression, @NotNull Environment environment) {
         return switch(expression) {
-            case GreaterThan gt -> BooleanExpressionEvaluator.eval(gt.deSugar(), environment);
+            case NotEqualTo notEqualTo -> BooleanExpressionEvaluator.eval(deSugar(notEqualTo), environment);
 
-            case GreaterOrEqual goe -> BooleanExpressionEvaluator.eval(goe.deSugar(), environment);
+            case GreaterThan gt -> BooleanExpressionEvaluator.eval(deSugar(gt), environment);
+
+            case GreaterOrEqual goe -> BooleanExpressionEvaluator.eval(deSugar(goe), environment);
+
+            case EqualTo equalTo ->  {
+                Numeric leftValue = NumericExpressionEvaluator.eval(equalTo.left(), environment);
+                Numeric rightValue = NumericExpressionEvaluator.eval(equalTo.right(), environment);
+                int comparison = leftValue.compareTo(rightValue);
+                yield Bool.makeBool(comparison == 0);
+            }
 
             case LessThan lt -> {
                 Numeric leftValue = NumericExpressionEvaluator.eval(lt.left(), environment);
@@ -22,8 +34,8 @@ public class ComparisonExpressionEvaluator {
             }
 
             case LessOrEqual le -> {
-                Numeric leftValue = le.left().numericEval(environment);
-                Numeric rightValue = le.right().numericEval(environment);
+                Numeric leftValue = NumericExpressionEvaluator.eval(le.left(), environment);
+                Numeric rightValue = NumericExpressionEvaluator.eval(le.right(), environment);
                 int comparison = leftValue.compareTo(rightValue);
                 yield Bool.makeBool(comparison <= 0);
             }

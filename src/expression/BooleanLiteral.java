@@ -1,21 +1,16 @@
 package expression;
 
 import environment.Environment;
+import org.jetbrains.annotations.NotNull;
 import value.Bool;
 
 import token.Token;
 
 public record BooleanLiteral(Token token, Bool value)
-        implements BooleanExpression {
+        implements BooleanExpression, Literal {
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return value.bool() ? "true" : "false";
-    }
-
-    @Override
-    public Bool eval(final Environment environment) {
-        return BooleanExpression.makeBool(value.equals(TRUE));
-    }
-
+    };
 }

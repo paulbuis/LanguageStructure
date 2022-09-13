@@ -1,10 +1,12 @@
 package value;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.math.BigInteger;
 
 final class Rational implements Numeric {
-    final BigInteger top;
-    final BigInteger bottom;
+    final @NotNull BigInteger top;
+    final @NotNull BigInteger bottom;
 
     static final Rational rationalZero = new Rational(BigInteger.ZERO, BigInteger.ONE);
     static final Rational rationalOne = new Rational(BigInteger.ONE, BigInteger.ONE);
@@ -14,7 +16,7 @@ final class Rational implements Numeric {
         this.bottom = BigInteger.valueOf(bottom);
     }
 
-    public Rational(BigInteger top, BigInteger bottom) {
+    public Rational(@NotNull BigInteger top, @NotNull BigInteger bottom) {
         BigInteger gcd = top.gcd(bottom);
         this.top = top.divide(gcd);
         this.bottom = bottom.divide(gcd);
@@ -33,11 +35,11 @@ final class Rational implements Numeric {
         return String.format("%s/%s", top, bottom);
     }
 
-    public Numeric negate() {
+    public @NotNull Numeric negate() {
         return new Rational(top.negate(), bottom);
     }
 
-    public Numeric invert() {
+    public @NotNull Numeric invert() {
         return new Rational(bottom, top);
     }
 
@@ -76,7 +78,7 @@ final class Rational implements Numeric {
         return top.divide(bottom).intValue();
     }
 
-    public Real toReal() {
+    public @NotNull Real toReal() {
         return new Real(this);
     }
 

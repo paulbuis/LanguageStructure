@@ -2,6 +2,7 @@ package parser;
 
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import token.Token.Name;
 import static token.Token.Name.*;
 import token.Token;
@@ -12,7 +13,7 @@ public abstract class Parser {
     private final List<Token> tokens;
     private int current = 0;
 
-    public Parser(List<Token> tokens) {
+    public Parser(@NotNull List<Token> tokens) {
         this.tokens = List.copyOf(tokens);
     }
 
@@ -43,7 +44,7 @@ public abstract class Parser {
         return previous();
     }
 
-    protected boolean match(Name... names) {
+    protected boolean match(Name @NotNull ... names) {
         for (Name name : names) {
             if (check(name)) {
                 advance();

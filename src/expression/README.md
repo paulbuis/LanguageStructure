@@ -1,6 +1,137 @@
 
 
 # Class Hierarchy Declarations
+
+```mermaid
+classDiagram
+class Expression {
+<<interface>>
++token()
+}
+
+class BinaryExpression {
+<<interface>>
++left()
++right()
+}
+
+class UnaryExpression {
++operand()
+}
+
+Expression <|-- BinaryExpression
+Expression <|-- NumericExpression
+Expression <|-- UnaryExpression
+
+class NumericExpression {
+<<interface>>
+}
+
+class Sum
+class Subtraction
+class Multiplication
+class Division
+class NumericLiteral
+
+class Grouping
+
+class Power {
++exponent
+}
+
+class Negation
+
+class Variable
+
+
+NumericExpression <|-- Sum
+NumericExpression <|-- Subtraction
+NumericExpression <|-- Multiplication
+NumericExpression <|-- Division
+NumericExpression <|-- Variable
+NumericExpression <|-- Power
+NumericExpression <|-- Negation
+NumericExpression <|-- NumericLiteral
+NumericExpression <|-- Grouping
+
+BinaryExpression <|-- Sum
+BinaryExpression <|-- Subtraction
+BinaryExpression <|-- Multiplication
+BinaryExpression <|-- Division
+
+UnaryExpression <|-- Power
+UnaryExpression <|-- Negation
+UnaryExpression <|-- Grouping
+```
+
+```mermaid
+classDiagram
+
+class Expression {
+<<interface>>
++token()
+}
+
+class BinaryExpression {
+<<interface>>
++left()
++right()
+}
+
+class UnaryExpression {
++operand()
+}
+
+
+Expression <|-- BinaryExpression
+class BooleanExpression {
+<<interface>>
+}
+
+class ComparisonExpression {
+<<interface>>
+}
+
+
+Expression <|-- BooleanExpression
+BooleanExpression <|-- ComparisonExpression
+BinaryExpression <|-- ComparisonExpression
+
+class And
+class Or
+class Variable
+class Grouping
+class Not
+
+UnaryExpression <|-- Grouping
+
+BooleanExpression <|-- Variable
+BooleanExpression <|-- Grouping
+BooleanExpression <|-- Not
+
+BooleanExpression <|-- And
+BooleanExpression <|-- Or
+BinaryExpression <|-- Or
+BinaryExpression <|-- And
+
+UnaryExpression <|-- Not
+
+class NotEqualTo
+class EqualTo
+class GreaterThan
+class GreaterOrEqual
+class LessThan
+class LessOrEqual
+
+ComparisonExpression <|-- EqualTo
+ComparisonExpression <|-- NotEqualTo
+ComparisonExpression <|-- GreaterThan
+ComparisonExpression <|-- GreaterOrEqual
+ComparisonExpression <|-- LessThan
+ComparisonExpression <|-- LessOrEqual
+
+```
+
 ```
 interface Expression
     permits NumericExpression, BooleanExpression, FunctionLiteral, FunctionCall

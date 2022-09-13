@@ -1,5 +1,7 @@
 package value;
 
+import org.jetbrains.annotations.NotNull;
+
 public sealed interface Numeric extends Value, Comparable<Numeric> permits Real, Rational {
     Numeric negate();
     Numeric invert();
@@ -10,11 +12,11 @@ public sealed interface Numeric extends Value, Comparable<Numeric> permits Real,
 
     int intValue();
 
-    default Numeric subtract(Numeric nv) {
+    default Numeric subtract(@NotNull Numeric nv) {
         return add(nv.negate());
     }
 
-    default Numeric divide(Numeric nv) {
+    default Numeric divide(@NotNull Numeric nv) {
         return multiply(nv.invert());
     }
 
@@ -22,7 +24,7 @@ public sealed interface Numeric extends Value, Comparable<Numeric> permits Real,
     Numeric ZERO = Rational.rationalZero;
     Numeric ONE = Rational.rationalOne;
 
-    static Numeric makeNumericValue(long value) {
+    static @NotNull Numeric makeNumericValue(long value) {
         return new Rational(value, 1);
     }
 

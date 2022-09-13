@@ -1,11 +1,12 @@
 package evaluate;
 
 import environment.Environment;
+import org.jetbrains.annotations.NotNull;
 import value.Bool;
 import expression.*;
 
 public class BooleanExpressionEvaluator {
-    public static Bool eval(Expression expression, Environment environment) {
+    public static Bool eval(Expression expression, @NotNull Environment environment) {
         BooleanExpression be = (BooleanExpression) expression;
         return switch(be) {
 
@@ -14,20 +15,20 @@ public class BooleanExpressionEvaluator {
             case Variable variable -> environment.lookupBool(variable.name());
 
             case And and -> {
-                if (!BooleanExpressionEvaluator.eval(and.left(), environment).bool()) {
+                if (!eval(and.left(), environment).bool()) {
                     yield Bool.FALSE; // short-circuit
                 }
-                yield  and.right().booleanEval(environment);
+                yield  eval(and.right(), environment);
             }
 
             case Or or -> {
                 if (BooleanExpressionEvaluator.eval(or.left(), environment).bool()) {
                     yield Bool.TRUE;  // short-circuit
                 }
-                yield or.right().booleanEval(environment);
+                yield eval(or.right(), environment);
             }
 
-            case Not not -> BooleanExpressionEvaluator.eval(not.operand(), environment);
+            case Not not -> eval(not.operand(), environment);
 
             case ComparisonExpression ce -> ComparisonExpressionEvaluator.eval(ce, environment);
         };

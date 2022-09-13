@@ -1,6 +1,8 @@
 package token;
 
 
+import org.jetbrains.annotations.NotNull;
+
 public final class Token {
     public enum Name {
         OPEN_PAREN,
@@ -32,7 +34,7 @@ public final class Token {
         LESS_OR_EQUAL,
         IDENTIFIER,
         WHITE_SPACE
-    };
+    }
 
     private final Name _name;
     private final CharSequence _lexeme;
@@ -41,7 +43,7 @@ public final class Token {
         this._lexeme = lexeme;
     }
 
-    public static Token makeToken(final Name name, final CharSequence lexeme) {
+    public static @NotNull Token makeToken(final Name name, final CharSequence lexeme) {
         return new Token(name, lexeme);
     }
 

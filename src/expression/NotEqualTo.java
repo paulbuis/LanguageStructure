@@ -1,25 +1,14 @@
 package expression;
 
-import environment.Environment;
-import value.Bool;
+
 import token.Token;
 
 public record NotEqualTo(Token token, Expression left, Expression right)
-        implements ComparisonExpression {
-
-    @Override
-    public Bool eval(Environment environment) {
-        return (Bool)(deSugar().eval(environment));
-    }
-
-    @Override
-    public BooleanExpression deSugar() {
-        return new Not(token, new EqualTo(token, left, right));
-    }
+        implements ComparisonExpression, Desugarable {
 
     @Override
     public String toString() {
-        return String.format("(%s) >= (%s)", left, right);
+        return String.format("(%s) \u2260 (%s)", left, right);
     }
 }
 

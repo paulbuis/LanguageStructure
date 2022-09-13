@@ -1,9 +1,12 @@
 package expression;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 public class Derivative {
-    public static Expression diff(Expression e, String varName) {
+    public static @Nullable Expression diff(@NotNull Expression e, String varName) {
         return switch (e) {
             case NumericLiteral ignored -> NumericExpression.ZERO;
 
