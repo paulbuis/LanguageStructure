@@ -1,12 +1,11 @@
 package evaluate;
 
 import environment.Environment;
-import org.jetbrains.annotations.NotNull;
 import value.Bool;
 import expression.*;
 
 public class BooleanExpressionEvaluator {
-    public static Bool eval(Expression expression, @NotNull Environment environment) {
+    public static Bool eval(Expression expression, Environment environment) {
         BooleanExpression be = (BooleanExpression) expression;
         return switch(be) {
 

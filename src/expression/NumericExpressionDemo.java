@@ -5,13 +5,12 @@ import java.util.List;
 
 import environment.Environment;
 import evaluate.Evaluator;
-import org.jetbrains.annotations.NotNull;
 import value.Numeric;
 import value.Value;
 
 public class NumericExpressionDemo {
 
-    static Value eval(@NotNull Expression e, @NotNull Environment env) {
+    static Value eval(Expression e, Environment env) {
         return Evaluator.eval(e, env);
     }
 

@@ -4,14 +4,13 @@ import expression.*;
 
 import static desugar.DeSugarer.deSugar;
 
-import org.jetbrains.annotations.NotNull;
 import value.Bool;
 import value.Numeric;
 
 import environment.Environment;
 
 public class ComparisonExpressionEvaluator {
-    public static Bool eval(@NotNull ComparisonExpression expression, @NotNull Environment environment) {
+    public static Bool eval(ComparisonExpression expression, Environment environment) {
         return switch(expression) {
             case NotEqualTo notEqualTo -> BooleanExpressionEvaluator.eval(deSugar(notEqualTo), environment);
 

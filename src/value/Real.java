@@ -1,7 +1,5 @@
 package value;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.math.BigDecimal;
 import java.math.MathContext;
 
@@ -18,7 +16,7 @@ final class Real implements Numeric {
         this.value = value;
     }
 
-    public Real(@NotNull Rational value) {
+    public Real(Rational value) {
         BigDecimal top = new BigDecimal(value.top);
         BigDecimal bottom = new BigDecimal(value.bottom);
         this.value = top.divide(bottom, MATH_CONTEXT);
@@ -26,7 +24,7 @@ final class Real implements Numeric {
 
 
     @Override
-    public int compareTo(@NotNull Numeric nv) {
+    public int compareTo(Numeric nv) {
         return switch (nv) {
             case Real real -> value.compareTo(real.value);
             case Rational rational -> value.compareTo(rational.toReal().value);
@@ -38,29 +36,29 @@ final class Real implements Numeric {
         return value.toString();
     }
 
-    public @NotNull Numeric negate() {
+    public Numeric negate() {
         return new Real(value.negate(MATH_CONTEXT));
     }
 
-    public @NotNull Numeric invert() {
+    public Numeric invert() {
         return new Real(BigDecimal.ONE.divide(this.value, MATH_CONTEXT));
     }
 
-    public Real add(@NotNull Numeric nv) {
+    public Real add(Numeric nv) {
         return switch(nv) {
             case Rational rational -> this.add(new Real(rational));
             case Real real -> new Real(this.value.add(real.value, MATH_CONTEXT));
         };
     }
 
-    public Real multiply(@NotNull Numeric nv){
+    public Real multiply(Numeric nv){
         return switch(nv) {
             case Rational rational -> this.multiply(new Real(rational));
             case Real real -> new Real(this.value.multiply(real.value, MATH_CONTEXT));
         };
     }
 
-    public @NotNull Real pow(int exponent) {
+    public Real pow(int exponent) {
         return new Real(value.pow(exponent, MATH_CONTEXT));
     }
 

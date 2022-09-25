@@ -6,14 +6,13 @@ import java.util.stream.Stream;
 
 import environment.Environment;
 import expression.*;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
 import value.Numeric;
 import desugar.DeSugarer;
 
 
 public class NumericExpressionEvaluator {
-    public static @Nullable Numeric eval(Expression expression, @NotNull Environment environment) {
+    public static Numeric eval(Expression expression, Environment environment) {
         NumericExpression ne = (NumericExpression)expression;
         return switch(ne) {
             case NumericLiteral numericLiteral -> numericLiteral.value();

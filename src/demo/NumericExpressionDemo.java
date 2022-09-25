@@ -6,7 +6,6 @@ import evaluate.Evaluator;
 import expression.Derivative;
 import expression.Expression;
 import expression.NumericExpression;
-import org.jetbrains.annotations.NotNull;
 import value.Numeric;
 import value.Value;
 
@@ -14,7 +13,7 @@ import java.util.List;
 
 public class NumericExpressionDemo {
 
-    static Value eval(@NotNull Expression e, Environment env) {
+    static Value eval(Expression e, Environment env) {
         return Evaluator.eval(e, env);
     }
 

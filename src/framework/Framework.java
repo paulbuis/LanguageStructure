@@ -11,7 +11,7 @@ import java.util.List;
 
 import environment.Environment;
 import lexer.Lexer;
-import org.jetbrains.annotations.NotNull;
+
 import token.Token;
 
 import parser.ExpressionParser;
@@ -37,7 +37,11 @@ public class Framework {
         hadError = true;
     }
 
-    private static void run(@NotNull String source) {
+    private static void run(String source) {
+        if (source == null) {
+            System.err.println("Framework.run() called with null source");
+            return;
+        }
         Lexer lexer = new Lexer(source);
         List<Token> tokens = lexer.tokenize();
 
@@ -54,7 +58,7 @@ public class Framework {
         System.out.printf("value: %s\n", value);
     }
 
-    private static void runFile(@NotNull String path) throws IOException {
+    private static void runFile(String path) throws IOException {
         byte[] bytes = Files.readAllBytes(Paths.get(path));
         run(new String(bytes, Charset.defaultCharset())); // change to UTF-8 ??
     }
@@ -73,7 +77,7 @@ public class Framework {
         }
     }
 
-    public static void main(String @NotNull [] args) throws IOException {
+    public static void main(String[] args) throws IOException {
         if (args.length > 1) {
             System.out.println("Usage: java framework.Framework [script]");
             System.exit(64);

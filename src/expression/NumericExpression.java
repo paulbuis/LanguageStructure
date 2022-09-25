@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.ArrayList;
 
 
-import org.jetbrains.annotations.NotNull;
 import value.Numeric;
 import token.Token;
 
@@ -17,15 +16,15 @@ public sealed interface NumericExpression extends Expression
     NumericExpression MINUS_ONE = makeConstant(null, Numeric.ONE.negate());
 
 
-    static @NotNull NumericExpression makeConstant(Token token, int integer) {
+    static NumericExpression makeConstant(Token token, int integer) {
         return makeConstant(token, Numeric.makeNumericValue(integer));
     }
-    static @NotNull NumericExpression makeConstant(Token token, Numeric value) {
+    static NumericExpression makeConstant(Token token, Numeric value) {
         return new NumericLiteral(token, value);
     }
-    static @NotNull NumericExpression makeNumericLiteral(Token token, Numeric value) {return makeConstant(token, value);}
+    static NumericExpression makeNumericLiteral(Token token, Numeric value) {return makeConstant(token, value);}
 
-    static @NotNull Expression makeVariable(Token token, String name) {
+    static Expression makeVariable(Token token, String name) {
         return new Variable(token, name);
     }
 
@@ -44,22 +43,22 @@ public sealed interface NumericExpression extends Expression
     }
 
 
-    static Expression makeDifference(Token token, @NotNull Expression left, Expression right) {
+    static Expression makeDifference(Token token, Expression left, Expression right) {
         return makeSum(token, left, makeNegation(token, right));
     }
 
 
-    static Expression makeDivision(Token token, @NotNull Expression left, Expression right) {
+    static Expression makeDivision(Token token, Expression left, Expression right) {
         return makeProduct(token, left, makeInversion(token, right));
     }
 
 
-    static Expression makeSum(Token token, @NotNull Expression e1, @NotNull Expression e2) {
+    static Expression makeSum(Token token, Expression e1, Expression e2) {
         return makeSum(token, List.of(e1, e2));
     }
 
 
-    static Expression makeSum(Token token, @NotNull List<Expression> termList0) {
+    static Expression makeSum(Token token, List<Expression> termList0) {
         List<Expression> termList = new ArrayList<>();
         for (Expression term : termList0) {
             switch (term) {
@@ -110,7 +109,7 @@ public sealed interface NumericExpression extends Expression
     }
 
 
-    static Expression makeProduct(Token token, @NotNull Expression left, Expression right) {
+    static Expression makeProduct(Token token, Expression left, Expression right) {
         return switch (left) {
             case NumericLiteral leftNumericConstant && leftNumericConstant.equals(ZERO) -> ZERO;
             case NumericLiteral leftNumericConstant && leftNumericConstant.equals(ONE) -> right;
@@ -132,7 +131,7 @@ public sealed interface NumericExpression extends Expression
     }
 
 
-    static @NotNull Expression makePower(Token token, Expression base, int exponent) {
+    static Expression makePower(Token token, Expression base, int exponent) {
         return new Power(token, base, exponent);
     }
 

@@ -4,11 +4,11 @@ import environment.Environment;
 import evaluate.BooleanExpressionEvaluator;
 import evaluate.NumericExpressionEvaluator;
 import expression.*;
-import org.jetbrains.annotations.NotNull;
+
 
 public class ConstantFolder {
 
-    public static Expression fold(@NotNull Expression expression) {
+    public static Expression fold(Expression expression) {
         return switch (expression) {
             case Literal literal -> literal;
             case UnaryExpression ue -> foldUnary(ue);
@@ -20,7 +20,7 @@ public class ConstantFolder {
         };
     }
 
-    private static Expression foldUnary(@NotNull UnaryExpression ue) {
+    private static Expression foldUnary(UnaryExpression ue) {
         Expression operandFolded = fold(ue.operand());
         return switch(ue) {
             case Negation negation -> {
@@ -61,7 +61,7 @@ public class ConstantFolder {
         };
     }
 
-    private static Expression foldBinary(@NotNull BinaryExpression be) {
+    private static Expression foldBinary(BinaryExpression be) {
         return switch(be) {
             case NumericExpression numericExpression -> foldBinaryNumeric(numericExpression);
             case BooleanExpression booleanExpression -> foldBinaryBoolean(booleanExpression);
@@ -69,7 +69,7 @@ public class ConstantFolder {
         };
     }
 
-    private static Expression foldBinaryNumeric(@NotNull NumericExpression numericExpression) {
+    private static Expression foldBinaryNumeric(NumericExpression numericExpression) {
 
         Expression leftFolded = fold(((BinaryExpression)numericExpression).left());
         Expression rightFolded = fold(((BinaryExpression)numericExpression).right());
@@ -154,7 +154,7 @@ public class ConstantFolder {
         };
     }
 
-    private static @NotNull Expression foldComparison(@NotNull ComparisonExpression comparisonExpression) {
+    private static Expression foldComparison(ComparisonExpression comparisonExpression) {
         Expression leftFolded = fold(comparisonExpression.left());
         Expression rightFolded = fold(comparisonExpression.right());
 

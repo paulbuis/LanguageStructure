@@ -2,7 +2,7 @@ package lexer;
 
 import static token.Token.Name.*;
 
-import org.jetbrains.annotations.NotNull;
+
 import token.Token.Name;
 import token.Token;
 
@@ -65,7 +65,7 @@ public class Lexer {
         }
     }
 
-    private @NotNull Token matchLongest()
+    private Token matchLongest()
     {
         final Map<Name, CharSequence> matchMap = new LinkedHashMap<>();
         CharSequence maxMatch = "";
@@ -87,11 +87,11 @@ public class Lexer {
 
     private CharSequence input; // not final!!!
 
-    public Lexer(@NotNull CharSequence input) {
+    public Lexer(CharSequence input) {
         this.input =  Normalizer.normalize(input, Normalizer.Form.NFKD);
     }
 
-    public @NotNull List<Token> tokenize() {
+    public List<Token> tokenize() {
         final ArrayList<Token> tokens = new ArrayList<>();
         while (!input.isEmpty()) {
             final Token nextToken = matchLongest();

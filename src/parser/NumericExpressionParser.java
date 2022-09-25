@@ -3,8 +3,6 @@ package parser;
 
 import expression.NumericExpression;
 import expression.Expression;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import token.Token;
 
 import java.util.List;
@@ -17,12 +15,12 @@ public class NumericExpressionParser extends Parser {
         return term();
     }
 
-    public NumericExpressionParser(@NotNull List<Token> tokens) {
+    public NumericExpressionParser(List<Token> tokens) {
         super(tokens);
     }
 
 
-    protected @Nullable Expression term() {
+    protected Expression term() {
         Expression left = factor();
 
         if (match(PLUS, MINUS)) {  // TODO: make this a while
@@ -62,7 +60,7 @@ public class NumericExpressionParser extends Parser {
         return primary();
     }
 
-    public @Nullable Expression primary() {
+    public Expression primary() {
         return null;
     }
 }
