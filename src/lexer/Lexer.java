@@ -1,60 +1,54 @@
 package lexer;
 
 import static token.Token.Name.*;
-
-
 import token.Token.Name;
 import token.Token;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
-
-// static import
-import static java.util.Map.entry;
 import java.util.LinkedHashMap;
-import java.util.TreeMap;
 
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-import java.util.regex.MatchResult;
+
 
 import java.text.Normalizer;
 
 public class Lexer {
 
-    private static final Map<Name, String> regexMap = new TreeMap(Map.ofEntries(
-            entry(OPEN_PAREN, "\\("),
-            entry(CLOSE_PAREN, "\\)"),
-            entry(COMMA, ","),
-            entry(OPEN_CURLY_BRACKET, "\\{"),
-            entry(CLOSE_CURLY_BRACKET, "\\}"),
-            entry(COLON, ":"),
-            entry(RATIONAL_LITERAL, "(0[xX][0-9a-fA-F]+)|(0[bB][01]+)|(-?[0-9]+(/[0-9]+)?)"),
-            entry(REAL_LITERAL, "(-?[0-9]+(\\.[0-9]*)?)|(-?[0-9]\\.[0-9]*([eE][+-]?[0-9]+))"),
-            entry(FUNCTION, "function"),
-            entry(LAMBDA, "lambda"),
-            entry(LET, "let"),
-            entry(AND, "and"),
-            entry(OR, "or"),
-            entry(NOT, "not|\\u00ac"),
-            entry(IF, "if"),
-            entry(THEN, "then"),
-            entry(ELSE, "else"),
-            entry(PLUS, "\\+"),
-            entry(MINUS, "-|\\u2212"),
-            entry(MULTIPLY, "\\*|\\u00d7|\\u22c5"),
-            entry(DIVIDE, "/|\\u00f7"),
-            entry(EQUAL, "=="),
-            entry(NOT_EQUAL, "!=|\\u2260"),
-            entry(GREATER_THAN, ">"),
-            entry(GREATER_OR_EQUAL, ">=|\\u2265"),
-            entry(LESS_THAN, "<"),
-            entry(LESS_OR_EQUAL, "<=|\\u2264"),
-            entry(Name.IDENTIFIER, "[a-zA-Z][a-zA-Z0-9]*"),
-            entry(Name.WHITE_SPACE, "(\\h|\\v)+")
-    ));
+    private static final LinkedHashMap<Name, String> regexMap = new LinkedHashMap<>();
+    static {
+        regexMap.put(OPEN_PAREN, "\\(");
+        regexMap.put(CLOSE_PAREN, "\\)");
+        regexMap.put(COMMA, ",");
+        regexMap.put(OPEN_CURLY_BRACKET, "\\{");
+        regexMap.put(CLOSE_CURLY_BRACKET, "\\}");
+        regexMap.put(COLON, ":");
+        regexMap.put(RATIONAL_LITERAL, "(0[xX][0-9a-fA-F]+)|(0[bB][01]+)|(-?[0-9]+(/[0-9]+)?)");
+        regexMap.put(REAL_LITERAL, "(-?[0-9]+(\\.[0-9]*)?)|(-?[0-9]\\.[0-9]*([eE][+-]?[0-9]+))");
+        regexMap.put(FUNCTION, "function");
+        regexMap.put(LAMBDA, "lambda");
+        regexMap.put(LET, "let");
+        regexMap.put(AND, "and");
+        regexMap.put(OR, "or");
+        regexMap.put(NOT, "not|\\u00ac");
+        regexMap.put(IF, "if");
+        regexMap.put(THEN, "then");
+        regexMap.put(ELSE, "else");
+        regexMap.put(PLUS, "\\+");
+        regexMap.put(MINUS, "-|\\u2212");
+        regexMap.put(MULTIPLY, "\\*|\\u00d7|\\u22c5");
+        regexMap.put(DIVIDE, "/|\\u00f7");
+        regexMap.put(EQUAL, "==");
+        regexMap.put(NOT_EQUAL, "!=|\\u2260");
+        regexMap.put(GREATER_THAN, ">");
+        regexMap.put(GREATER_OR_EQUAL, ">=|\\u2265");
+        regexMap.put(LESS_THAN, "<");
+        regexMap.put(LESS_OR_EQUAL, "<=|\\u2264");
+        regexMap.put(Name.IDENTIFIER, "[a-zA-Z][a-zA-Z0-9]*");
+        regexMap.put(Name.WHITE_SPACE, "(\\h|\\v)+");
+    };
 
     private static final Map<Name, Pattern> patternMap = new LinkedHashMap<>();
     // static initializer
@@ -67,7 +61,6 @@ public class Lexer {
 
     private Token matchLongest()
     {
-        final Map<Name, CharSequence> matchMap = new LinkedHashMap<>();
         CharSequence maxMatch = "";
         Name maxMatchName = null;
         for (Name tokenName: patternMap.keySet()) {
@@ -102,13 +95,11 @@ public class Lexer {
     }
 
     public static void main(String[] args) {
-        String input = "+-*/:,if then else and or not 1. 2.5 2/3 7";
+        String input = "+-*/:,if then<=<>else!=and==or not-1.\n2.5\t2/3 -7 xyz 0x1a 0b11 0";
         Lexer lexer = new Lexer(input);
         List<Token> tokens = lexer.tokenize();
         for (Token token: tokens) {
             System.out.printf("%s\n", token);
         }
     }
-
-
 }
