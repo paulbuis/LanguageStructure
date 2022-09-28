@@ -32,18 +32,22 @@ public final class Token {
         LESS_THAN,
         LESS_OR_EQUAL,
         IDENTIFIER,
-        WHITE_SPACE
+        HORIZONTAL_WHITE_SPACE,
+        VERTICAL_WHITE_SPACE
     }
 
     private final Name _name;
-    private final CharSequence _lexeme;
-    private Token(final Name name, final CharSequence lexeme) {
+    private final String _lexeme;
+    private final Location _location;
+
+    private Token(final Name name, final String lexeme, Location location) {
         this._name = name;
         this._lexeme = lexeme;
+        this._location = location;
     }
 
-    public static Token makeToken(final Name name, final CharSequence lexeme) {
-        return new Token(name, lexeme);
+    public static Token makeToken(final Name name, final String lexeme, final Location location) {
+        return new Token(name, lexeme, location);
     }
 
     public CharSequence lexeme() {
@@ -54,9 +58,11 @@ public final class Token {
         return this._name;
     }
 
+    public Location location() { return this._location; }
+
     @Override
     public String toString() {
-        return String.format("%s, \"%s\"", _name, _lexeme);
+        return String.format("%s, \"%s\"\n%s\n", _name, _lexeme, _location);
     }
 
 }

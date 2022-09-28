@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 import environment.Environment;
 import expression.*;
 
+import token.Token;
 import value.Numeric;
 import desugar.DeSugarer;
 
@@ -19,7 +20,7 @@ public class NumericExpressionEvaluator {
 
             case Variable v -> environment.lookupNumeric(v.name());
 
-            case Multiplication m -> {
+            case Multiplication m-> {
                 final Numeric leftValue = eval(m.left(), environment);
                 final Numeric rightValue = eval(m.right(), environment);
                 yield leftValue.multiply(rightValue);

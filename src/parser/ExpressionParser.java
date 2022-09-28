@@ -6,7 +6,6 @@ import expression.Expression;
 import token.Token;
 
 import static token.Token.Name.*;
-import static token.Token.Name.LESS_OR_EQUAL;
 
 
 public class ExpressionParser extends NumericExpressionParser {

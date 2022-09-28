@@ -3,6 +3,7 @@ package lexer;
 import static token.Token.Name.*;
 import token.Token.Name;
 import token.Token;
+import token.Location;
 
 import java.util.Map;
 import java.util.List;
@@ -16,6 +17,8 @@ import java.util.regex.Matcher;
 import java.text.Normalizer;
 
 public class Lexer {
+
+    Location location = new Location("???", 1, 0, 0, 0);
 
     private static final LinkedHashMap<Name, String> regexMap = new LinkedHashMap<>();
     static {
@@ -46,9 +49,10 @@ public class Lexer {
         regexMap.put(GREATER_OR_EQUAL, ">=|\\u2265");
         regexMap.put(LESS_THAN, "<");
         regexMap.put(LESS_OR_EQUAL, "<=|\\u2264");
-        regexMap.put(Name.IDENTIFIER, "[a-zA-Z][a-zA-Z0-9]*");
-        regexMap.put(Name.WHITE_SPACE, "(\\h|\\v)+");
-    };
+        regexMap.put(IDENTIFIER, "[a-zA-Z][a-zA-Z0-9]*");
+        regexMap.put(HORIZONTAL_WHITE_SPACE, "\\h+");
+        regexMap.put(VERTICAL_WHITE_SPACE, "\\n|(\\r\\n?)");
+    }
 
     private static final Map<Name, Pattern> patternMap = new LinkedHashMap<>();
     // static initializer
@@ -75,7 +79,15 @@ public class Lexer {
             }
         }
         // TODO: need to handle maxMatchName == null && maxMatch.length() == 0
-        return Token.makeToken(maxMatchName, maxMatch);
+        if (maxMatchName.equals(VERTICAL_WHITE_SPACE)) {
+            location = location.newLine();
+        } else {
+            int charCount = maxMatch.length();
+            int codePointCount =  (int)maxMatch.codePoints().count();
+            int clusterCount = codePointCount; // TODO: Fix This!!!
+            location = location.increment(charCount, codePointCount, clusterCount);
+        }
+        return Token.makeToken(maxMatchName, String.valueOf(maxMatch), location);
     }
 
     private CharSequence input; // not final!!!
@@ -95,7 +107,7 @@ public class Lexer {
     }
 
     public static void main(String[] args) {
-        String input = "+-*/:,if then<=<>else!=and==or not-1.\n2.5\t2/3 -7 xyz 0x1a 0b11 0";
+        String input = "+-*/:,if then<=<>else!=and==or not-1.\n2.5\t2/3 -7\rxyz 0x1\r\n0b11 0";
         Lexer lexer = new Lexer(input);
         List<Token> tokens = lexer.tokenize();
         for (Token token: tokens) {

@@ -1,7 +1,5 @@
 package expression;
 
-import environment.Environment;
-
 import token.Token;
 
 public record EqualTo(Token token, Expression left, Expression right)
