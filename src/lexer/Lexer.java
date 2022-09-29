@@ -16,9 +16,10 @@ import java.util.regex.Matcher;
 
 import java.text.Normalizer;
 
+
 public class Lexer {
 
-    Location location = new Location("???", 1, 0, 0, 0);
+    Location location;
 
     private static final LinkedHashMap<Name, String> regexMap = new LinkedHashMap<>();
     static {
@@ -78,21 +79,29 @@ public class Lexer {
                 }
             }
         }
+
+        if (maxMatchName == null || maxMatch.length() == 0) {
+            return Token.makeToken(ERROR, "", location);
+
+        }
         // TODO: need to handle maxMatchName == null && maxMatch.length() == 0
+        final String maxMatchString = maxMatch.toString();
+        final Token resultToken = Token.makeToken(maxMatchName, maxMatchString, location);
         if (maxMatchName.equals(VERTICAL_WHITE_SPACE)) {
             location = location.newLine();
         } else {
-            int charCount = maxMatch.length();
-            int codePointCount =  (int)maxMatch.codePoints().count();
-            int clusterCount = codePointCount; // TODO: Fix This!!!
-            location = location.increment(charCount, codePointCount, clusterCount);
+
+            location = location.increment(maxMatchString);
         }
-        return Token.makeToken(maxMatchName, String.valueOf(maxMatch), location);
+        return resultToken;
     }
 
     private CharSequence input; // not final!!!
+    private final String sourceName;
 
-    public Lexer(CharSequence input) {
+    public Lexer(String sourceName, CharSequence input) {
+        this.sourceName = sourceName;
+        this.location = new Location(sourceName, 1, 0, 0, 0);
         this.input =  Normalizer.normalize(input, Normalizer.Form.NFKD);
     }
 
@@ -102,13 +111,17 @@ public class Lexer {
             final Token nextToken = matchLongest();
             input = input.subSequence(nextToken.lexeme().length(), input.length());
             tokens.add(nextToken);
+            if (nextToken.name().equals(ERROR)) {
+                System.err.printf("Illegal token at %s\n", location);
+                break;
+            }
         }
         return tokens;
     }
 
     public static void main(String[] args) {
         String input = "+-*/:,if then<=<>else!=and==or not-1.\n2.5\t2/3 -7\rxyz 0x1\r\n0b11 0";
-        Lexer lexer = new Lexer(input);
+        Lexer lexer = new Lexer("test string", input);
         List<Token> tokens = lexer.tokenize();
         for (Token token: tokens) {
             System.out.printf("%s\n", token);

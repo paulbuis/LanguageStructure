@@ -33,7 +33,8 @@ public final class Token {
         LESS_OR_EQUAL,
         IDENTIFIER,
         HORIZONTAL_WHITE_SPACE,
-        VERTICAL_WHITE_SPACE
+        VERTICAL_WHITE_SPACE,
+        ERROR
     }
 
     private final Name _name;

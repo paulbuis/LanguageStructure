@@ -28,8 +28,10 @@ public class Framework {
 
     private static boolean hadError = false;
 
+    private static String sourceName;
+
     public static void error(int line, String message) {
-        report(line, "", message);
+        report(line, sourceName, message);
     }
 
     private static void report(int line, String where, String message) {
@@ -37,12 +39,13 @@ public class Framework {
         hadError = true;
     }
 
-    private static void run(String source) {
+    private static void run(String sourceName, String source) {
+        Framework.sourceName = sourceName;
         if (source == null) {
             System.err.println("Framework.run() called with null source");
             return;
         }
-        Lexer lexer = new Lexer(source);
+        Lexer lexer = new Lexer(sourceName, source);
         List<Token> tokens = lexer.tokenize();
 
         for(Token token : tokens) {
@@ -60,7 +63,7 @@ public class Framework {
 
     private static void runFile(String path) throws IOException {
         byte[] bytes = Files.readAllBytes(Paths.get(path));
-        run(new String(bytes, Charset.defaultCharset())); // change to UTF-8 ??
+        run(path, new String(bytes, Charset.defaultCharset())); // change to UTF-8 ??
     }
 
     private static void runPrompt() throws IOException {
@@ -73,7 +76,7 @@ public class Framework {
             if (line == null) {
                 break;
             }
-            run(line);
+            run("<stdin>", line);
         }
     }
 
