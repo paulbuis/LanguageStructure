@@ -62,7 +62,7 @@ public sealed interface NumericExpression extends Expression
         List<Expression> termList = new ArrayList<>();
         for (Expression term : termList0) {
             switch (term) {
-                case NumericLiteral numericConstant && numericConstant.equals(ZERO):
+                case NumericLiteral numericConstant when numericConstant.equals(ZERO):
                     break;
                 case Sum sum:
                     termList.addAll(sum.terms());
@@ -86,8 +86,10 @@ public sealed interface NumericExpression extends Expression
         Expression previousTerm = ZERO;
         ArrayList<Expression> termList2 = new ArrayList<>();
         for (Expression currentTerm : termList) {
-            if (previousTerm instanceof NumericLiteral previousNumericConstant && currentTerm instanceof NumericLiteral currentNumericConstant) {
-                NumericLiteral combinedNumericConstant = new NumericLiteral(token, previousNumericConstant.value().add(currentNumericConstant.value()));
+            if (previousTerm instanceof NumericLiteral previousNumericConstant &&
+                    currentTerm instanceof NumericLiteral currentNumericConstant) {
+                NumericLiteral combinedNumericConstant =
+                        new NumericLiteral(token, previousNumericConstant.value().add(currentNumericConstant.value()));
                 int index = termList2.size() - 1;
                 if (index < 0) {
                     termList2.add(combinedNumericConstant);
@@ -111,8 +113,8 @@ public sealed interface NumericExpression extends Expression
 
     static Expression makeProduct(Token token, Expression left, Expression right) {
         return switch (left) {
-            case NumericLiteral leftNumericConstant && leftNumericConstant.equals(ZERO) -> ZERO;
-            case NumericLiteral leftNumericConstant && leftNumericConstant.equals(ONE) -> right;
+            case NumericLiteral leftNumericConstant when leftNumericConstant.equals(ZERO) -> ZERO;
+            case NumericLiteral leftNumericConstant when leftNumericConstant.equals(ONE) -> right;
             case NumericLiteral leftNumericConstant -> {
                 if (right instanceof NumericLiteral rightNumericConstant) {
                     yield makeConstant(token, leftNumericConstant.value().multiply(rightNumericConstant.value()));
@@ -121,10 +123,10 @@ public sealed interface NumericExpression extends Expression
                 }
             }
             default -> switch (right) {
-                case NumericLiteral rightNumericConstant && rightNumericConstant.equals(ZERO) -> ZERO;
-                case NumericLiteral rightNumericConstant && rightNumericConstant.equals(ONE) -> left;
+                case NumericLiteral rightNumericConstant when rightNumericConstant.equals(ZERO) -> ZERO;
+                case NumericLiteral rightNumericConstant when rightNumericConstant.equals(ONE) -> left;
                 case NumericLiteral rightNumericConstant -> new Multiplication(token, rightNumericConstant, left);
-                case Inversion rightInversion && left.equals(rightInversion.operand()) -> ONE;
+                case Inversion rightInversion when left.equals(rightInversion.operand()) -> ONE;
                 default -> new Multiplication(token, left, right);
             };
         };

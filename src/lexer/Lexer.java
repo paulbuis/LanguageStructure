@@ -29,8 +29,8 @@ public class Lexer {
         regexMap.put(OPEN_CURLY_BRACKET, "\\{");
         regexMap.put(CLOSE_CURLY_BRACKET, "\\}");
         regexMap.put(COLON, ":");
-        regexMap.put(RATIONAL_LITERAL, "(0[xX][0-9a-fA-F]+)|(0[bB][01]+)|(-?[0-9]+(/[0-9]+)?)");
-        regexMap.put(REAL_LITERAL, "(-?[0-9]+(\\.[0-9]*)?)|(-?[0-9]\\.[0-9]*([eE][+-]?[0-9]+))");
+        regexMap.put(RATIONAL_LITERAL, "(?:0[xX][0-9a-fA-F]+)|(?:0[bB][01]+)|(?:-?[0-9]+(?:/[0-9]+)?)");
+        regexMap.put(REAL_LITERAL, "(?:-?[0-9]+(?:\\.[0-9]*)?)|(?:-?[0-9]\\.[0-9]*(?:[eE][+-]?[0-9]+))");
         regexMap.put(FUNCTION, "function");
         regexMap.put(LAMBDA, "lambda");
         regexMap.put(LET, "let");
@@ -84,13 +84,12 @@ public class Lexer {
             return Token.makeToken(ERROR, "", location);
 
         }
-        // TODO: need to handle maxMatchName == null && maxMatch.length() == 0
+
         final String maxMatchString = maxMatch.toString();
         final Token resultToken = Token.makeToken(maxMatchName, maxMatchString, location);
         if (maxMatchName.equals(VERTICAL_WHITE_SPACE)) {
             location = location.newLine();
         } else {
-
             location = location.increment(maxMatchString);
         }
         return resultToken;
